@@ -1,0 +1,19 @@
+{
+    "detail-type": "AWS API Call via CloudTrail",
+    "source": "aws.ssm",
+    "detail": {
+        "eventName": "PutParameter",
+        "eventSource": "ssm.amazonaws.com",
+        "userIdentity": {
+            "arn": "arn:aws:iam::415703161648:user/demo-user"
+        },
+        "requestParameters": {
+            "name": "/demo/config/setting",
+            "value": "test-value-changed-DEMO",
+            "type": "String"
+        },
+        "responseElements": {
+            "version": 1
+        }
+    }
+}
