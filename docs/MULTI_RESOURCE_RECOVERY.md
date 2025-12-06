@@ -211,7 +211,7 @@ aws dynamodb delete-table --table-name AiOpsDataTable
 ### Test 4: S3 Bucket Deletion
 ```bash
 # Delete bucket (must be empty first)
-aws s3 rb s3://aiops-data-bucket-415703161648 --force
+aws s3 rb s3://aiops-data-bucket-YOUR_AWS_ACCOUNT_ID --force
 
 # Expected: Bucket recreated within 2 minutes
 # Notification: Email with bucket details
@@ -240,7 +240,7 @@ Each recovery sends a detailed email with:
 Event: DeleteFunction
 Resource Type: LAMBDA
 Resource ID: aiops-monitored-function
-User: arn:aws:iam::415703161648:user/nimish
+User: arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/nimish
 
 🤖 AI ANALYSIS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -12,13 +12,13 @@
 
 ### DynamoDB Tables
 1. ✅ **aiops-devops-agent-incidents**
-   - ARN: `arn:aws:dynamodb:us-east-1:415703161648:table/aiops-devops-agent-incidents`
+   - ARN: `arn:aws:dynamodb:us-east-1:YOUR_AWS_ACCOUNT_ID:table/aiops-devops-agent-incidents`
    - Purpose: Store all incident records with correlation IDs
    - Features: 3 GSIs, Point-in-time recovery, TTL, Encryption
    - Status: ACTIVE
 
 2. ✅ **aiops-devops-agent-patterns**
-   - ARN: `arn:aws:dynamodb:us-east-1:415703161648:table/aiops-devops-agent-patterns`
+   - ARN: `arn:aws:dynamodb:us-east-1:YOUR_AWS_ACCOUNT_ID:table/aiops-devops-agent-patterns`
    - Purpose: Store log patterns for anomaly detection
    - Features: 1 GSI, Point-in-time recovery, Encryption
    - Status: ACTIVE
@@ -26,7 +26,7 @@
 ### Lambda Function
 3. ✅ **aiops-devops-agent-orchestrator**
    - Environment Variables:
-     - `SNS_TOPIC_ARN`: arn:aws:sns:us-east-1:415703161648:aiops-devops-agent-notifications
+     - `SNS_TOPIC_ARN`: arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications
      - `INCIDENT_TABLE`: aiops-devops-agent-incidents
      - `PATTERNS_TABLE`: aiops-devops-agent-patterns
    - IAM Permissions: Updated with DynamoDB access

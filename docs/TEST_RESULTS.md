@@ -37,7 +37,7 @@ aws lambda invoke --function-name aiops-devops-agent-orchestrator --payload file
   "detail": {
     "eventName": "PutParameter",
     "userIdentity": {
-      "arn": "arn:aws:iam::415703161648:user/attacker"
+      "arn": "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/attacker"
     },
     "requestParameters": {
       "name": "/myapp/config/mode",
@@ -55,7 +55,7 @@ aws lambda invoke --function-name aiops-devops-agent-orchestrator --payload file
 ```
 You are a DevOps Agent. An infrastructure event occurred:
 Event: PutParameter
-User: arn:aws:iam::415703161648:user/attacker
+User: arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/attacker
 Details: {...}
 
 Analyze this event.
@@ -95,7 +95,7 @@ DEBUG: Notification sent
 ---
 
 ### Step 5: Email Notification
-**SNS Topic**: `arn:aws:sns:us-east-1:415703161648:aiops-devops-agent-notifications`
+**SNS Topic**: `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications`
 **Recipient**: `nimish.mehta@gmail.com`
 
 **Email Subject**: `DevOps Agent: Recovery Started`

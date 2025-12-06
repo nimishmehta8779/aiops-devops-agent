@@ -143,7 +143,7 @@ Service Restored
 
 **To:** nimish.mehta@gmail.com  
 **Subject:** 🔥 AI DevOps Agent - Chaos Demo: ALB Deletion & Recovery  
-**SNS Topic:** `arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications`
+**SNS Topic:** `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications`
 
 **Email Content:**
 ```

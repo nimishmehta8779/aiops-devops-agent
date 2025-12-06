@@ -105,7 +105,7 @@ cat > test_demo.json <<'EOF'
     "eventName": "PutParameter",
     "eventSource": "ssm.amazonaws.com",
     "userIdentity": {
-      "arn": "arn:aws:iam::415703161648:user/demo-user"
+      "arn": "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/demo-user"
     },
     "requestParameters": {
       "name": "/demo/config/setting",

@@ -67,7 +67,7 @@ def create_agent(role_arn):
     1. Check Infrastructure Health: Use 'get_infra_health' to see the status of EC2 instances.
     2. Analyze Failures: If you suspect a failure, use 'get_infra_health' or ask the user for logs.
     3. Recover: If infrastructure is unhealthy or missing, use 'trigger_recovery' to run the CodeBuild pipeline.
-    4. Notify: Always use 'send_notification' to inform the user (nimish.mehta@gmail.com) about failures and recovery actions.
+    4. Notify: Always use 'send_notification' to inform the user (your-email@example.com) about failures and recovery actions.
     
     Workflow:
     - If you receive a failure alert, first check health.

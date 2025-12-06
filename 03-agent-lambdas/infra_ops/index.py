@@ -8,7 +8,7 @@ cloudtrail = boto3.client('cloudtrail')
 sns = boto3.client('sns')
 
 # Hardcoded for simplicity in this demo, ideally passed via env vars
-SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:415703161648:aiops-devops-agent-notifications"
+SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications"
 CODEBUILD_PROJECT = "aiops-devops-agent-apply"
 
 def get_infra_health():

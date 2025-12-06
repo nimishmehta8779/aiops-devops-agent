@@ -20,7 +20,7 @@ resource "aws_sns_topic" "notifications" {
 resource "aws_sns_topic_subscription" "email" {
   topic_arn = aws_sns_topic.notifications.arn
   protocol  = "email"
-  endpoint  = "nimish.mehta@gmail.com"
+  endpoint  = "your-email@example.com"
 }
 
 # 3. S3 Bucket for Terraform State (for the app infra)

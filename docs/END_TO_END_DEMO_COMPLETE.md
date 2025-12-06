@@ -71,7 +71,7 @@
 ## Email Notification
 
 ### SNS Topic Created
-- **Topic ARN:** `arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications`
+- **Topic ARN:** `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications`
 - **Subscription:** Email to nimish.mehta@gmail.com
 - **Status:** ✅ Sent
 
@@ -210,7 +210,7 @@ aws logs tail /aws/lambda/aiops-devops-agent-orchestrator --follow
 ```bash
 # After confirming subscription, test with:
 aws sns publish \
-  --topic-arn arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications \
+  --topic-arn arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications \
   --subject "Test Notification" \
   --message "This is a test from AI DevOps Agent"
 ```
@@ -293,7 +293,7 @@ You'll receive:
 
 ```
 Topic Name: aiops-demo-notifications
-Topic ARN:  arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications
+Topic ARN:  arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications
 Protocol:   email
 Endpoint:   nimish.mehta@gmail.com
 Status:     PendingConfirmation
@@ -303,11 +303,11 @@ Status:     PendingConfirmation
 ```bash
 # List subscriptions
 aws sns list-subscriptions-by-topic \
-  --topic-arn arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications
+  --topic-arn arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications
 
 # Send test message
 aws sns publish \
-  --topic-arn arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications \
+  --topic-arn arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications \
   --subject "Test" \
   --message "Hello from AI DevOps Agent!"
 ```
@@ -352,6 +352,6 @@ aws sns publish \
 
 **Report saved:** `end_to_end_demo_report_20251206_170639.html`  
 **Email sent:** nimish.mehta@gmail.com  
-**SNS Topic:** `arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications`
+**SNS Topic:** `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications`
 
 **You're ready to showcase your amazing AI DevOps Agent to the world!** 🚀

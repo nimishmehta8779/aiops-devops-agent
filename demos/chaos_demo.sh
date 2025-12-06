@@ -25,8 +25,8 @@ NC='\033[0m'
 # Configuration
 DEMO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPORT_FILE="${DEMO_DIR}/chaos_demo_report_$(date +%Y%m%d_%H%M%S).html"
-EMAIL_TO="nimish.mehta@gmail.com"
-SNS_TOPIC_ARN="arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications"
+EMAIL_TO="your-email@example.com"
+SNS_TOPIC_ARN="arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications"
 
 # AWS Resources
 LAMBDA_ORCHESTRATOR="aiops-devops-agent-orchestrator"
@@ -188,10 +188,10 @@ simulate_alb_deletion() {
     "eventSource": "elasticloadbalancing.amazonaws.com",
     "userIdentity": {
       "type": "IAMUser",
-      "arn": "arn:aws:iam::415703161648:user/chaos-engineer"
+      "arn": "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/chaos-engineer"
     },
     "requestParameters": {
-      "loadBalancerArn": "${ALB_ARN:-arn:aws:elasticloadbalancing:us-east-1:415703161648:loadbalancer/app/demo-alb/1234567890}"
+      "loadBalancerArn": "${ALB_ARN:-arn:aws:elasticloadbalancing:us-east-1:YOUR_AWS_ACCOUNT_ID:loadbalancer/app/demo-alb/1234567890}"
     },
     "responseElements": null
   }

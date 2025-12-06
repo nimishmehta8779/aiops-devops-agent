@@ -20,8 +20,8 @@ NC='\033[0m'
 # Configuration
 DEMO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPORT_FILE="${DEMO_DIR}/full_trace_demo_$(date +%Y%m%d_%H%M%S).html"
-EMAIL_TO="nimish.mehta@gmail.com"
-SNS_TOPIC_ARN="arn:aws:sns:us-east-1:415703161648:aiops-demo-notifications"
+EMAIL_TO="your-email@example.com"
+SNS_TOPIC_ARN="arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications"
 LAMBDA_ORCHESTRATOR="aiops-devops-agent-orchestrator"
 LAMBDA_LOG_ANALYZER="aiops-devops-agent-log-analyzer"
 DYNAMODB_INCIDENTS="aiops-devops-agent-incidents"
@@ -62,7 +62,7 @@ cat > /tmp/auto_recovery_event.json <<'EOF'
     "eventSource": "ec2.amazonaws.com",
     "userIdentity": {
       "type": "IAMUser",
-      "arn": "arn:aws:iam::415703161648:user/production-user",
+      "arn": "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/production-user",
       "userName": "production-user"
     },
     "requestParameters": {

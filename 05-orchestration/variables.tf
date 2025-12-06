@@ -19,7 +19,7 @@ variable "aws_region" {
 variable "sns_topic_arn" {
   description = "SNS Topic ARN for notifications"
   type        = string
-  default     = "arn:aws:sns:us-east-1:415703161648:aiops-devops-agent-notifications"
+  default     = "arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications"
 }
 
 variable "codebuild_project_name" {

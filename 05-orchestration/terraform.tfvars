@@ -10,7 +10,7 @@ environment  = "dev"
 aws_region   = "us-east-1"
 
 # SNS Topic (update with your actual ARN)
-sns_topic_arn = "arn:aws:sns:us-east-1:415703161648:aiops-devops-agent-notifications"
+sns_topic_arn = "arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications"
 
 # CodeBuild Project (update with your actual project name)
 codebuild_project_name = "aiops-devops-agent-apply"

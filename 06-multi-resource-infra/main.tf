@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "aiops-devops-agent-tfstate-415703161648"
+    bucket = "aiops-devops-agent-tfstate-YOUR_AWS_ACCOUNT_ID"
     key    = "multi-resource-infra/terraform.tfstate"
     region = "us-east-1"
   }

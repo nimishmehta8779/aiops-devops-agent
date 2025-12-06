@@ -12,7 +12,7 @@
 
 ### Lambda Function
 1. ✅ **aiops-devops-agent-log-analyzer**
-   - ARN: `arn:aws:lambda:us-east-1:415703161648:function:aiops-devops-agent-log-analyzer`
+   - ARN: `arn:aws:lambda:us-east-1:YOUR_AWS_ACCOUNT_ID:function:aiops-devops-agent-log-analyzer`
    - Runtime: Python 3.11
    - Timeout: 300 seconds (5 minutes)
    - Handler: `index.handler`
@@ -44,7 +44,7 @@
 ```json
 {
   "ANOMALY_THRESHOLD": "0.7",
-  "SNS_TOPIC_ARN": "arn:aws:sns:us-east-1:415703161648:aiops-devops-agent-notifications",
+  "SNS_TOPIC_ARN": "arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications",
   "PATTERNS_TABLE": "aiops-devops-agent-patterns",
   "LOG_GROUPS": "/aws/lambda/aiops-devops-agent-orchestrator"
 }

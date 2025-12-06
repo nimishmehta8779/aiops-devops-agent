@@ -27,7 +27,7 @@ NC='\033[0m'
 # Configuration
 DEMO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPORT_FILE="${DEMO_DIR}/end_to_end_demo_report_$(date +%Y%m%d_%H%M%S).html"
-EMAIL_TO="nimish.mehta@gmail.com"
+EMAIL_TO="your-email@example.com"
 SNS_TOPIC_NAME="aiops-demo-notifications"
 
 # AWS Resources
