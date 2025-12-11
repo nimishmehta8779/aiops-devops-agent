@@ -25,8 +25,8 @@ dynamodb = boto3.client('dynamodb')
 INCIDENT_TABLE = os.environ.get('INCIDENT_TABLE', 'aiops-incidents')
 SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN', '')
 CODEBUILD_PROJECT = os.environ.get('CODEBUILD_PROJECT', 'aiops-devops-agent-apply')
-DEFAULT_EMAIL = os.environ.get('DEFAULT_EMAIL', 'nimish.mehta@gmail.com')
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'noreply@aiops.example.com')
+DEFAULT_EMAIL = os.environ.get('DEFAULT_EMAIL', 'devops@example.com')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'noreply@example.com')
 
 
 def structured_log(level: str, message: str, correlation_id: str = None, **kwargs):
@@ -38,7 +38,7 @@ def structured_log(level: str, message: str, correlation_id: str = None, **kwarg
         'correlation_id': correlation_id,
         **kwargs
     }
-    print(json.dumps(log_entry))
+    print(json.dumps(log_entry, default=str))
 
 
 def generate_correlation_id() -> str:
@@ -123,23 +123,35 @@ def update_workflow_state(incident_id: str, state: str, data: Dict = None) -> bo
             ':state': {'S': state},
             ':updated': {'S': datetime.utcnow().isoformat()}
         }
+        expr_names = {}
         
         if data:
             for key, value in data.items():
-                update_expr += f", {key} = :{key}"
-                if isinstance(value, bool):
-                    expr_values[f':{key}'] = {'BOOL': value}
-                elif isinstance(value, (int, float)):
-                    expr_values[f':{key}'] = {'N': str(value)}
+                if key == 'error':
+                    # 'error' is a reserved keyword in DynamoDB
+                    update_expr += ", #err = :error"
+                    expr_names['#err'] = 'error'
+                    expr_values[':error'] = {'S': str(value)}
                 else:
-                    expr_values[f':{key}'] = {'S': str(value)}
+                    update_expr += f", {key} = :{key}"
+                    if isinstance(value, bool):
+                        expr_values[f':{key}'] = {'BOOL': value}
+                    elif isinstance(value, (int, float)):
+                        expr_values[f':{key}'] = {'N': str(value)}
+                    else:
+                        expr_values[f':{key}'] = {'S': str(value)}
         
-        dynamodb.update_item(
-            TableName=INCIDENT_TABLE,
-            Key={'incident_id': {'S': incident_id}},
-            UpdateExpression=update_expr,
-            ExpressionAttributeValues=expr_values
-        )
+        update_args = {
+            'TableName': INCIDENT_TABLE,
+            'Key': {'incident_id': {'S': incident_id}},
+            'UpdateExpression': update_expr,
+            'ExpressionAttributeValues': expr_values
+        }
+        
+        if expr_names:
+            update_args['ExpressionAttributeNames'] = expr_names
+            
+        dynamodb.update_item(**update_args)
         return True
         
     except Exception as e:
@@ -178,7 +190,14 @@ def handler(event, context):
         resource_type = detect_resource_type(nested_detail)
         resource_id = extract_resource_identifier(nested_detail, resource_type)
         user_identity = 'RegionalForwarder'
+        resource_id = extract_resource_identifier(nested_detail, resource_type)
+        user_identity = 'RegionalForwarder'
         detail = nested_detail # promote nested detail
+    elif detail_type == 'RDS DB Instance Event':
+        resource_type = 'rds'
+        resource_id = detail.get('SourceIdentifier', 'unknown')
+        event_name = detail.get('Message', 'RDS Event')
+        user_identity = 'System'
     else:
         structured_log("WARN", f"Unknown event type: {detail_type}", correlation_id)
         return {"status": "ignored", "reason": "unknown_event_type"}
@@ -268,7 +287,7 @@ def handler(event, context):
         return {
             'status': 'success',
             'correlation_id': correlation_id,
-            'results': results
+            'results': json.loads(json.dumps(results, default=str))
         }
         
     except Exception as e:

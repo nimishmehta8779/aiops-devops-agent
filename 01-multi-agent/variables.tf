@@ -31,13 +31,13 @@ variable "codebuild_project" {
 variable "default_email" {
   description = "Default email for notifications"
   type        = string
-  default     = "nimish.mehta@gmail.com"
+  default     = "devops@example.com"
 }
 
 variable "sender_email" {
   description = "Sender email for SES notifications"
   type        = string
-  default     = "noreply@aiops.example.com"
+  default     = "noreply@example.com"
 }
 
 variable "enable_ses" {

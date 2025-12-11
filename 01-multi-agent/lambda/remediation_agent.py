@@ -62,6 +62,9 @@ class RemediationAgent(BaseAgent):
         # Get telemetry results if available
         telemetry_results = context.get('previous_agent_results', {}).get('telemetry', {})
         
+        # Assess risk level
+        risk_level = self._assess_risk_level(runbook, resource_type, classification)
+        
         self.log("INFO", f"Generating remediation plan for {resource_type}/{resource_id}")
         
         # Generate runbook using Bedrock
@@ -73,11 +76,18 @@ class RemediationAgent(BaseAgent):
             telemetry_results
         )
         
-        # Assess risk level
-        risk_level = self._assess_risk_level(runbook, resource_type, classification)
         
         # Determine if approval is required
-        requires_approval = risk_level in ['high', 'medium'] or classification == 'CRITICAL'
+        # Check Risk Agent decision first
+        risk_agent_result = context.get('previous_agent_results', {}).get('risk', {})
+        risk_analysis = risk_agent_result.get('analysis', {})
+        
+        if 'approval_required' in risk_analysis:
+            requires_approval = risk_analysis['approval_required']
+            self.log("INFO", f"Using Risk Agent approval decision: {requires_approval}")
+        else:
+            # Fallback to internal assessment
+            requires_approval = risk_level in ['high'] or classification == 'CRITICAL'
         
         # Generate rollback plan
         rollback_plan = self._generate_rollback_plan(runbook, resource_type)
@@ -148,6 +158,31 @@ class RemediationAgent(BaseAgent):
                 for anomaly in anomalies[:3]:
                     telemetry_summary += f"- {anomaly.get('description', 'Unknown')}\n"
         
+        # Retrieve context from Knowledge Base (RAG)
+        kb_context = ""
+        try:
+            kb_id = self.config.get('knowledge_base_id')
+            if kb_id:
+                agent_runtime = boto3.client('bedrock-agent-runtime')
+                query = f"remediation for {resource_type} {event_name} incident"
+                
+                response = agent_runtime.retrieve(
+                    knowledgeBaseId=kb_id,
+                    retrievalQuery={'text': query},
+                    retrievalConfiguration={
+                        'vectorSearchConfiguration': {'numberOfResults': 3}
+                    }
+                )
+                
+                results = response.get('retrievalResults', [])
+                if results:
+                    kb_context = "\n\nRELEVANT PAST INCIDENTS & RUNBOOKS:\n"
+                    for result in results:
+                        kb_context += f"- {result.get('content', {}).get('text', '')}\n"
+                    self.log("INFO", f"Retrieved {len(results)} contexts from Knowledge Base")
+        except Exception as e:
+            self.log("WARN", f"Failed to retrieve from Knowledge Base: {e}")
+
         prompt = f"""You are a DevOps AI Agent creating a remediation runbook for an AWS infrastructure incident.
 
 INCIDENT DETAILS:
@@ -156,6 +191,7 @@ INCIDENT DETAILS:
 - Event: {event_name}
 - Classification: {classification}
 {telemetry_summary}
+{kb_context}
 
 CREATE A STEP-BY-STEP REMEDIATION RUNBOOK:
 
@@ -208,18 +244,58 @@ RESPOND IN VALID JSON FORMAT:
         except Exception as e:
             self.log("ERROR", f"Error generating runbook: {e}")
             
-            # Fallback to simple runbook
+            # Smart Fallback
+            steps = []
+            if resource_type == 'ec2':
+                steps = [{
+                    'step_number': 1,
+                    'action_type': 'ssm',
+                    'command': 'AWS-StartEC2Instance',
+                    'parameters': {'InstanceId': [resource_id]},
+                    'description': f'Start EC2 instance {resource_id}',
+                    'timeout_seconds': 300,
+                    'success_criteria': 'Instance is running'
+                }]
+            elif resource_type == 'rds':
+                steps = [{
+                    'step_number': 1,
+                    'action_type': 'ssm',
+                    'command': 'AWS-StartRdsInstance',
+                    'parameters': {'DBInstanceIdentifier': [resource_id]},
+                    'description': f'Start RDS instance {resource_id}',
+                    'timeout_seconds': 600,
+                    'success_criteria': 'DB Instance available'
+                }]
+            elif resource_type in ['kubernetes', 'eks']:
+                steps = [{
+                    'step_number': 1,
+                    'action_type': 'lambda',
+                    'command': 'aiops-kubernetes-agent',
+                    'description': f'Analyze and remediate Kubernetes resource {resource_id}',
+                    'timeout_seconds': 300,
+                    'success_criteria': 'Pod/Deployment healthy'
+                }]
+            elif resource_type == 'lambda':
+                steps = [{
+                    'step_number': 1,
+                    'action_type': 'terraform',
+                    'description': f'Redeploy Lambda function {resource_id}',
+                    'timeout_seconds': 300,
+                    'command': 'terraform apply -auto-approve',
+                    'success_criteria': 'Function active'
+                }]
+            else:
+                steps = [{
+                    'step_number': 1,
+                    'action_type': 'terraform',
+                    'description': f'Restore {resource_type} using Terraform',
+                    'timeout_seconds': 300,
+                    'command': 'terraform apply -auto-approve',
+                    'success_criteria': 'Resource restored'
+                }]
+
             return {
-                'steps': [
-                    {
-                        'step_number': 1,
-                        'action_type': 'terraform',
-                        'description': f'Restore {resource_type} using Terraform',
-                        'timeout_seconds': 300,
-                        'command': 'terraform apply -auto-approve',
-                        'success_criteria': 'Resource restored'
-                    }
-                ],
+                'steps': steps,
                 'estimated_duration_seconds': 300,
                 'prerequisites': []
             }
@@ -357,7 +433,7 @@ RESPOND IN VALID JSON FORMAT:
             
             response = self.ssm.start_automation_execution(
                 DocumentName=document_name,
-                Parameters={}
+                Parameters=step.get('parameters', {})
             )
             
             execution_id = response['AutomationExecutionId']

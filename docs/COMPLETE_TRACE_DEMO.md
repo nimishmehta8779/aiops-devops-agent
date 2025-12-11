@@ -5,7 +5,7 @@
 **Date:** December 6, 2025, 17:23 IST  
 **Duration:** 51 seconds  
 **Status:** ✅ **100% SUCCESS**  
-**Email Sent:** ✅ nimish.mehta@gmail.com  
+**Email Sent:** ✅ devops@example.com  
 **Architecture Diagram:** ✅ GENERATED for LinkedIn
 
 ---
@@ -13,7 +13,7 @@
 ## 📧 **IMPORTANT: Confirm SNS Subscription**
 
 ### **Action Required:**
-1. **Check your email**: nimish.mehta@gmail.com
+1. **Check your email**: devops@example.com
 2. **Look for**: "AWS Notification - Subscription Confirmation"
 3. **Click**: "Confirm subscription" link
 4. **Result**: You'll start receiving all demo reports!
@@ -216,7 +216,7 @@ Confidence (70%) < Threshold (80%)
 
 ## 📧 **Email Sent**
 
-**To:** nimish.mehta@gmail.com  
+**To:** devops@example.com  
 **Subject:** 🤖 AI DevOps Agent - Complete Trace Demo with Bedrock Analysis  
 **Status:** ✅ SENT (pending subscription confirmation)
 
@@ -285,7 +285,7 @@ Confidence (70%) < Threshold (80%)
 
 ### **1. Confirm SNS Subscription** ⚠️
 ```
-Check: nimish.mehta@gmail.com
+Check: devops@example.com
 Action: Click confirmation link
 Result: Start receiving notifications
 ```
@@ -408,7 +408,7 @@ cd /home/rockylinux/devel/aiops-ecs-bedrock/aiops-devops-agent/05-orchestration
 ---
 
 **Demo completed:** December 6, 2025, 17:24 IST  
-**Email sent:** nimish.mehta@gmail.com (confirm subscription!)  
+**Email sent:** devops@example.com (confirm subscription!)  
 **Report:** full_trace_demo_20251206_172321.html  
 **LinkedIn:** Architecture diagram ready!  
 **Incident ID:** incident-cedd8314-cef6-4bac-9735-67f284afa3ff  

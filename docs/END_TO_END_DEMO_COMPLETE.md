@@ -5,7 +5,7 @@
 **Date:** December 6, 2025, 17:06-17:07 IST  
 **Duration:** 35 seconds  
 **Status:** ✅ **100% SUCCESS**  
-**Email Sent:** ✅ nimish.mehta@gmail.com
+**Email Sent:** ✅ devops@example.com
 
 ---
 
@@ -72,13 +72,13 @@
 
 ### SNS Topic Created
 - **Topic ARN:** `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications`
-- **Subscription:** Email to nimish.mehta@gmail.com
+- **Subscription:** Email to devops@example.com
 - **Status:** ✅ Sent
 
 ### ⚠️ IMPORTANT: Confirm Subscription
 
 **Action Required:**
-1. Check your email: **nimish.mehta@gmail.com**
+1. Check your email: **devops@example.com**
 2. Look for email from: **AWS Notifications**
 3. Subject: **"AWS Notification - Subscription Confirmation"**
 4. Click the confirmation link
@@ -185,7 +185,7 @@ cat end_to_end_demo_report_20251206_170639.html
 
 ### 1. Confirm Email Subscription ⚠️
 ```
-Check: nimish.mehta@gmail.com
+Check: devops@example.com
 Action: Click confirmation link in AWS email
 Result: You'll receive future notifications
 ```
@@ -295,7 +295,7 @@ You'll receive:
 Topic Name: aiops-demo-notifications
 Topic ARN:  arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications
 Protocol:   email
-Endpoint:   nimish.mehta@gmail.com
+Endpoint:   devops@example.com
 Status:     PendingConfirmation
 ```
 
@@ -351,7 +351,7 @@ aws sns publish \
 ---
 
 **Report saved:** `end_to_end_demo_report_20251206_170639.html`  
-**Email sent:** nimish.mehta@gmail.com  
+**Email sent:** devops@example.com  
 **SNS Topic:** `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications`
 
 **You're ready to showcase your amazing AI DevOps Agent to the world!** 🚀

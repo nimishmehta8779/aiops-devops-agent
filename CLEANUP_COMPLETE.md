@@ -284,7 +284,7 @@ Create a screen recording showing:
 ### How to Get Help
 - **Issues:** GitHub Issues for bugs and features
 - **Discussions:** GitHub Discussions for questions
-- **Email:** nimish.mehta@gmail.com
+- **Email:** devops@example.com
 
 ### Maintenance Plan
 - Monthly dependency updates

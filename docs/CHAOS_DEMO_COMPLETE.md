@@ -6,7 +6,7 @@
 **Duration:** 16 seconds  
 **Chaos Type:** Application Load Balancer (ALB) Deletion  
 **Status:** ✅ **SUCCESS**  
-**Email Sent:** ✅ nimish.mehta@gmail.com
+**Email Sent:** ✅ devops@example.com
 
 ---
 
@@ -91,7 +91,7 @@ T+90s   ⏸️  Recovery Awaiting Human Decision
 - Workflow state: COMPLETED
 
 ### **5. Email Notifications** ✅
-- Report sent to: nimish.mehta@gmail.com
+- Report sent to: devops@example.com
 - HTML report generated
 - Complete incident details included
 
@@ -141,7 +141,7 @@ Service Restored
 
 ### **Email Sent** ✅
 
-**To:** nimish.mehta@gmail.com  
+**To:** devops@example.com  
 **Subject:** 🔥 AI DevOps Agent - Chaos Demo: ALB Deletion & Recovery  
 **SNS Topic:** `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-demo-notifications`
 
@@ -275,7 +275,7 @@ This demo proves the system can handle:
 ## 🎯 Next Steps
 
 ### **Immediate Actions**
-1. ✅ Check email: nimish.mehta@gmail.com
+1. ✅ Check email: devops@example.com
 2. ✅ Confirm SNS subscription (if not already done)
 3. ✅ View HTML report
 4. ✅ Review incident in DynamoDB
@@ -350,7 +350,7 @@ We successfully demonstrated:
 
 **Demo completed:** December 6, 2025, 17:16 IST  
 **Duration:** 16 seconds  
-**Email sent:** nimish.mehta@gmail.com  
+**Email sent:** devops@example.com  
 **Report:** chaos_demo_report_20251206_171631.html  
 **Incident ID:** incident-cfdcfaa0-3291-4716-9fd5-ba76ee0513e2  
 **Status:** ✅ **CHAOS-READY!**

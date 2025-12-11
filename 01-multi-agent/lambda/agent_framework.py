@@ -164,7 +164,7 @@ class BaseAgent(ABC):
     
     def invoke_bedrock(self, prompt: str, max_tokens: int = 1024, temperature: float = 0.1) -> str:
         """
-        Helper method to invoke Bedrock
+        Helper method to invoke Bedrock (Claude 3 Haiku)
         
         Args:
             prompt: The prompt to send to Bedrock
@@ -174,6 +174,7 @@ class BaseAgent(ABC):
         Returns:
             LLM response text
         """
+        # Amazon Titan Express Configuration
         body = json.dumps({
             "inputText": prompt,
             "textGenerationConfig": {
@@ -184,15 +185,20 @@ class BaseAgent(ABC):
             }
         })
         
-        response = self.bedrock.invoke_model(
-            modelId="amazon.titan-text-express-v1",
-            body=body,
-            contentType="application/json",
-            accept="application/json"
-        )
-        
-        response_body = json.loads(response.get('body').read())
-        return response_body.get('results')[0].get('outputText').strip()
+        try:
+            response = self.bedrock.invoke_model(
+                modelId="amazon.titan-text-express-v1",
+                body=body,
+                contentType="application/json",
+                accept="application/json"
+            )
+            
+            response_body = json.loads(response.get('body').read())
+            return response_body.get('results')[0].get('outputText').strip()
+            
+        except Exception as e:
+            self.log("ERROR", f"Error invoking Bedrock: {e}")
+            return "Error generating response from AI model."
 
 
 class AgentRegistry:

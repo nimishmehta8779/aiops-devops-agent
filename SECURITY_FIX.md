@@ -11,7 +11,7 @@
 ## 🛡️ What Was Fixed
 
 ### 1. AWS Account ID Removed
-- **Before:** `415703161648` (exposed in 30+ files)
+- **Before:** `123456789012` (exposed in 30+ files)
 - **After:** `YOUR_AWS_ACCOUNT_ID` (placeholder)
 
 **Files Updated:**
@@ -22,7 +22,7 @@
 - All documentation (*.md)
 
 ### 2. Email Addresses Sanitized
-- **Before:** `nimish.mehta@gmail.com` (in demo scripts and configs)
+- **Before:** `devops@example.com` (in demo scripts and configs)
 - **After:** `your-email@example.com` (placeholder)
 
 **Files Updated:**
@@ -137,7 +137,7 @@ Author: Nimish Mehta
 Date:   December 6, 2025
 Message: Security: Remove AWS account ID and sensitive information
 
-- Replaced AWS account ID (415703161648) with YOUR_AWS_ACCOUNT_ID placeholder
+- Replaced AWS account ID (123456789012) with YOUR_AWS_ACCOUNT_ID placeholder
 - Replaced email addresses in demo scripts with your-email@example.com
 - Kept contact email in README.md only
 - All ARNs now use placeholder account ID

@@ -1,0 +1,22 @@
+{
+    "detail-type": "AWS API Call via CloudTrail",
+    "source": "aws.ec2",
+    "region": "us-east-1",
+    "detail": {
+        "eventName": "TerminateInstances",
+        "eventTime": "2025-12-11T11:35:00Z",
+        "eventSource": "ec2.amazonaws.com",
+        "userIdentity": {
+            "arn": "arn:aws:iam::123456789012:user/test-user"
+        },
+        "requestParameters": {
+            "instancesSet": {
+                "items": [
+                    {
+                        "instanceId": "i-1234567890abcdef0"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -5,7 +5,7 @@ Uses custom ML models for anomaly detection and pattern recognition
 
 import json
 import os
-import numpy as np
+import statistics
 from typing import Dict, List, Any
 from datetime import datetime, timedelta
 import boto3
@@ -34,21 +34,19 @@ class AnomalyDetector:
         if len(data) < 3:
             return []
         
-        data_array = np.array(data)
-        mean = np.mean(data_array)
-        std = np.std(data_array)
+        mean = statistics.mean(data)
+        std = statistics.stdev(data) if len(data) > 1 else 0
         
         if std == 0:
             return []
         
-        z_scores = np.abs((data_array - mean) / std)
-        
         anomalies = []
-        for i, z_score in enumerate(z_scores):
+        for i, value in enumerate(data):
+            z_score = abs((value - mean) / std)
             if z_score > self.sensitivity:
                 anomalies.append({
                     'index': i,
-                    'value': float(data[i]),
+                    'value': float(value),
                     'z_score': float(z_score),
                     'severity': 'high' if z_score > 3 else 'medium'
                 })
@@ -177,8 +175,10 @@ class ThresholdOptimizer:
                 optimized[metric_name] = self.default_thresholds.get(metric_name, 100.0)
                 continue
             
-            # Use 95th percentile as threshold
-            threshold = np.percentile(values, 95)
+            # Use 95th percentile as threshold (manual calculation)
+            sorted_values = sorted(values)
+            index = int(len(sorted_values) * 0.95)
+            threshold = sorted_values[min(index, len(sorted_values) - 1)]
             optimized[metric_name] = float(threshold)
         
         return optimized

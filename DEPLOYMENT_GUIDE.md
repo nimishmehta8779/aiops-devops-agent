@@ -88,7 +88,7 @@ cd ../phase-6-multi-agent
 cat > terraform.tfvars <<EOF
 incident_table_name = "aiops-incidents"
 codebuild_project   = "aiops-devops-agent-apply"
-default_email       = "nimish.mehta@gmail.com"
+default_email       = "devops@example.com"
 EOF
 
 terraform init
@@ -179,7 +179,7 @@ git commit -m "chore: Remove legacy infrastructure directories"
    - **Resource restored**: EC2 instance recreated from IaC
 
 5. **Notification**
-   - **Communications Agent**: Sends email to nimish.mehta@gmail.com
+   - **Communications Agent**: Sends email to devops@example.com
    - Includes incident summary, actions taken, verification
 
 ---

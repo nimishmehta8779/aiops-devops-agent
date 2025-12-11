@@ -96,7 +96,7 @@ DEBUG: Notification sent
 
 ### Step 5: Email Notification
 **SNS Topic**: `arn:aws:sns:us-east-1:YOUR_AWS_ACCOUNT_ID:aiops-devops-agent-notifications`
-**Recipient**: `nimish.mehta@gmail.com`
+**Recipient**: `devops@example.com`
 
 **Email Subject**: `DevOps Agent: Recovery Started`
 

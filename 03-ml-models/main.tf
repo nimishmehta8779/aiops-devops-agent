@@ -37,16 +37,6 @@ data "archive_file" "ml_lambda" {
   output_path = "${path.module}/ml_agent.zip"
 }
 
-# Lambda Layer for numpy
-resource "aws_lambda_layer_version" "numpy" {
-  filename            = "${path.module}/layers/numpy-layer.zip"
-  layer_name          = "numpy-scipy-layer"
-  compatible_runtimes = ["python3.11"]
-
-  # Note: You need to create this layer separately
-  # See: https://github.com/keithrozario/Klayers
-}
-
 # ML Agent Lambda
 resource "aws_lambda_function" "ml_agent" {
   filename         = data.archive_file.ml_lambda.output_path
@@ -57,8 +47,6 @@ resource "aws_lambda_function" "ml_agent" {
   runtime          = "python3.11"
   timeout          = 300
   memory_size      = 1024
-
-  layers = [aws_lambda_layer_version.numpy.arn]
 
   environment {
     variables = {

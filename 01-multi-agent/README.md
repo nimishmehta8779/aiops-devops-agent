@@ -97,8 +97,8 @@ Create `terraform.tfvars`:
 aws_region         = "us-east-1"
 project_name       = "aiops-multi-agent"
 incident_table_name = "aiops-incidents"
-default_email      = "nimish.mehta@gmail.com"
-sender_email       = "noreply@aiops.example.com"
+default_email      = "devops@example.com"
+sender_email       = "noreply@example.com"
 enable_ses         = false  # Set to true after SES verification
 ```
 
@@ -118,7 +118,7 @@ If `enable_ses = true`, verify both sender and recipient emails:
 ```bash
 # Check verification status
 aws ses get-identity-verification-attributes \
-  --identities noreply@aiops.example.com nimish.mehta@gmail.com
+  --identities noreply@example.com devops@example.com
 ```
 
 Click verification links in emails sent by AWS.
@@ -152,7 +152,7 @@ aws logs filter-log-events \
 
 ### Check Email Notifications
 
-If SES is enabled, check email at `nimish.mehta@gmail.com` for incident notifications.
+If SES is enabled, check email at `devops@example.com` for incident notifications.
 
 ## Configuration
 

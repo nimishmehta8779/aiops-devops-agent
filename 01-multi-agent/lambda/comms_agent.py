@@ -213,7 +213,7 @@ Automated remediation in progress.
         """Get email recipients based on severity"""
         
         # Default recipient from config
-        default_email = self.config.get('default_email', 'nimish.mehta@gmail.com')
+        default_email = self.config.get('default_email', 'devops@example.com')
         
         recipients = [default_email]
         
@@ -256,7 +256,7 @@ To approve pending remediation actions, reply to this email with "APPROVE {self.
             
             # Send via SES
             response = self.ses.send_email(
-                Source=self.config.get('sender_email', 'noreply@aiops.example.com'),
+                Source=self.config.get('sender_email', 'noreply@example.com'),
                 Destination={'ToAddresses': recipients},
                 Message={
                     'Subject': {'Data': subject},

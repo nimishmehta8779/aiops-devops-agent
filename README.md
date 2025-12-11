@@ -317,7 +317,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact
 
 - **Author**: Nimish Mehta
-- **Email**: nimish.mehta@gmail.com
+- **Email**: devops@example.com
 - **GitHub**: [@nimishmehta8779](https://github.com/nimishmehta8779)
 - **LinkedIn**: [Nimish Mehta](https://www.linkedin.com/in/nimish-mehta)
 

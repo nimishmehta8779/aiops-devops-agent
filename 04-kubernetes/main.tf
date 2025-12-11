@@ -12,6 +12,31 @@ provider "aws" {
   region = var.aws_region
 }
 
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    # This requires the awscli to be installed locally where Terraform is executed
+    args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+  }
+}
+
+data "aws_caller_identity" "current" {}
+
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
 variable "aws_region" {
   description = "AWS region"
   type        = string
@@ -57,7 +82,7 @@ resource "aws_lambda_function" "kubectl_layer" {
 
   environment {
     variables = {
-      AWS_REGION = var.aws_region
+      # AWS_REGION is reserved and automatically provided
     }
   }
 }
@@ -75,7 +100,7 @@ resource "aws_lambda_function" "k8s_agent" {
 
   environment {
     variables = {
-      EKS_CLUSTER_NAME   = var.eks_cluster_name
+      CLUSTER_NAME       = module.eks.cluster_name
       KUBECTL_LAMBDA_ARN = aws_lambda_function.kubectl_layer.arn
     }
   }
