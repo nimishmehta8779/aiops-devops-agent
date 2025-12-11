@@ -1,342 +1,535 @@
-# 🤖 AI DevOps Agent - Self-Learning Infrastructure Recovery Platform
+# AIOps Multi-Agent DevOps Automation Platform
 
-[![AWS](https://img.shields.io/badge/AWS-Lambda%20%7C%20Bedrock%20%7C%20DynamoDB-orange)](https://aws.amazon.com/)
-[![Terraform](https://img.shields.io/badge/IaC-Terraform-purple)](https://www.terraform.io/)
-[![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-
-> **An intelligent, self-learning AIOps platform that detects infrastructure failures in < 1 second, analyzes them with AI, and automatically recovers your infrastructure - all for $2.75/month.**
-
-![AI DevOps Agent Architecture](https://raw.githubusercontent.com/nimishmehta8779/aiops-devops-agent/main/docs/architecture-diagram.png)
+An intelligent, event-driven DevOps automation platform that uses multiple AI agents to detect, analyze, and automatically remediate infrastructure failures across AWS services.
 
 ## 🎯 Overview
 
-The AI DevOps Agent is a production-ready, serverless platform that transforms infrastructure management from reactive to proactive. It combines real-time event detection, AI-powered analysis using Amazon Bedrock, and automated recovery via Infrastructure as Code.
-
-### Key Features
-
-- ⚡ **Real-time Detection**: < 1 second failure detection via CloudTrail & EventBridge
-- 🧠 **AI-Powered Analysis**: Amazon Bedrock (Claude 3 Sonnet) for intelligent event classification
-- 🔄 **Automatic Recovery**: Terraform-based infrastructure restoration in ~90 seconds
-- 🛡️ **Safety First**: Confidence thresholds prevent false auto-recoveries
-- 📊 **Complete Observability**: Full audit trail with correlation IDs
-- 🔮 **Proactive Monitoring**: Predicts failures before they occur (30%+ prevented)
-- 💰 **Cost Effective**: Only $2.75/month (serverless architecture)
+This platform implements a sophisticated multi-agent system that provides:
+- **Real-time Failure Detection**: Sub-second detection via EventBridge
+- **Intelligent Triage**: AI-powered incident classification and deduplication
+- **Risk Assessment**: Automated safety validation before remediation
+- **Autonomous Recovery**: Self-healing infrastructure with rollback capabilities
+- **Human-in-the-Loop**: Approval workflows for high-risk changes
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    AI DevOps Agent Architecture                      │
-└─────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────┐
-│  Event Sources  │
-├─────────────────┤
-│  CloudTrail     │──┐
-│  EventBridge    │──┼──────────> ┌──────────────────────┐
-│  CloudWatch     │──┘            │  Lambda Orchestrator │
-│  Logs           │               │  (Event Handler)     │
-└─────────────────┘               └──────────┬───────────┘
-                                             │
-                                             │ Invoke
-                                             ▼
-                                  ┌──────────────────────┐
-                                  │  Amazon Bedrock      │
-                                  │  (Claude 3 Sonnet)   │
-                                  │  - Classify Event    │
-                                  │  - Calculate Conf.   │
-                                  │  - Predict Impact    │
-                                  └──────────┬───────────┘
-                                             │
-                    ┌────────────────────────┼────────────────────────┐
-                    │                        │                        │
-                    ▼                        ▼                        ▼
-         ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
-         │   DynamoDB       │    │   CodeBuild      │    │      SNS         │
-         │   - Incidents    │    │   (Terraform)    │    │   (Alerts)       │
-         │   - Patterns     │    │   - Auto-Recover │    │   - Email        │
-         │   - Audit Trail  │    │   - Restore IaC  │    │   - Slack        │
-         └──────────────────┘    └──────────────────┘    └──────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│  Key Metrics                                                         │
-│  • Detection: < 1 second                                            │
-│  • AI Analysis: ~4 seconds                                          │
-│  • Recovery: ~90 seconds                                            │
-│  • Total MTTR: ~93 seconds                                          │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-### Data Flow
-
-1. **Detection (< 1s)**: CloudTrail captures AWS API calls → EventBridge routes to Lambda
-2. **Analysis (~4s)**: Lambda invokes Bedrock → AI classifies event and calculates confidence
-3. **Decision (< 0.1s)**: Confidence ≥ 80% = Auto-recovery | < 80% = Manual review
-4. **Recovery (~90s)**: CodeBuild executes Terraform → Infrastructure restored
-5. **Learning (continuous)**: DynamoDB stores patterns → AI improves over time
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- AWS Account with appropriate permissions
-- Terraform >= 1.0
-- AWS CLI configured
-- Python 3.11+
-
-### Deployment
-
-```bash
-# Clone the repository
-git clone https://github.com/nimishmehta8779/aiops-devops-agent.git
-cd aiops-devops-agent
-
-# Configure your AWS account
-cd 05-orchestration
-cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars and replace YOUR_AWS_ACCOUNT_ID with your account ID
-
-# Deploy Phase 1: Foundation (DynamoDB)
-terraform init
-terraform apply -var="enable_dynamodb=true"
-
-# Deploy Phase 2: Enhanced Lambda
-terraform apply -var="enable_enhanced_lambda=true"
-
-# Deploy Phase 3: Proactive Monitoring
-terraform apply -var="enable_log_analyzer=true"
-```
-
-See [DEPLOYMENT_GUIDE.md](05-orchestration/DEPLOYMENT_GUIDE.md) for detailed instructions.
-
-## 📊 Performance Metrics
-
-| Metric | Value |
-|--------|-------|
-| **Detection Time** | < 1 second |
-| **AI Analysis Time** | ~4 seconds |
-| **Recovery Time** | ~90 seconds |
-| **Total MTTR** | ~93 seconds |
-| **Failures Prevented** | 30%+ (proactive) |
-| **False Positive Rate** | < 5% |
-| **Success Rate** | > 95% |
-| **Monthly Cost** | $2.75 |
-
-## 🧠 How It Works
-
-### 1. Detection (< 1 second)
-- CloudTrail captures AWS API calls
-- EventBridge routes events to Lambda
-- Real-time detection with no polling
-
-### 2. AI Analysis (~4 seconds)
-- Amazon Bedrock analyzes the event
-- Classifies as FAILURE, TAMPERING, or NORMAL
-- Calculates confidence score (70-95%)
-- Considers historical context
-- Predicts impact and blast radius
-
-### 3. Decision (< 0.1 seconds)
-- Confidence >= 80%: Auto-recovery triggered
-- Confidence < 80%: Manual review requested
-- Cooldown protection prevents loops
-
-### 4. Recovery (~90 seconds)
-- CodeBuild executes Terraform
-- Infrastructure restored to desired state
-- Health checks verify recovery
-- Team notified via SNS
-
-### 5. Learning (continuous)
-- Every incident logged to DynamoDB
-- Patterns recognized and stored
-- AI improves over time
-- Historical context for better decisions
-
-## 🎓 Use Cases
-
-### Supported Resource Types
-
-- ✅ EC2 Instances (termination, state changes)
-- ✅ Lambda Functions (deletion, configuration changes)
-- ✅ DynamoDB Tables (deletion, tampering)
-- ✅ S3 Buckets (deletion, policy changes)
-- ✅ Application Load Balancers (deletion)
-- ✅ RDS Databases (deletion, modifications)
-- ✅ SSM Parameters (unauthorized changes)
-
-### Example Scenarios
-
-**Scenario 1: Accidental EC2 Termination**
-```
-1. Engineer accidentally terminates production EC2 instance
-2. CloudTrail captures TerminateInstances API call (< 1s)
-3. AI analyzes: FAILURE, confidence 95%
-4. Auto-recovery triggered
-5. Terraform recreates instance (~90s)
-6. Service restored, team notified
-```
-
-**Scenario 2: Malicious Activity**
-```
-1. Unauthorized user deletes S3 bucket
-2. Event detected and analyzed
-3. AI classifies as TAMPERING, confidence 85%
-4. Auto-recovery triggered
-5. Bucket recreated with original policies
-6. Security team alerted
-```
-
-## 📁 Project Structure
+### System Architecture
 
 ```
-aiops-devops-agent/
-├── 01-base-infra/          # VPC, networking, base infrastructure
-├── 02-app-infra/           # Application infrastructure
-├── 03-agent-lambdas/       # Agent Lambda functions
-├── 04-bedrock-agent/       # Bedrock configuration
-├── 05-orchestration/       # Main orchestrator Lambda
-│   ├── lambda/
-│   │   ├── index.py                    # Original Lambda
-│   │   └── index_enhanced.py           # Enhanced with AI
-│   ├── dynamodb.tf                     # Incident & pattern tables
-│   ├── log_analyzer.tf                 # Proactive monitoring
-│   ├── main.tf                         # Orchestrator Lambda
-│   └── DEPLOYMENT_GUIDE.md
-├── 06-log-analyzer/        # Proactive log analysis Lambda
-├── demos/                  # Demo scripts
-│   ├── quick_test.sh
-│   ├── chaos_demo_simple.sh
-│   └── full_trace_demo.sh
-├── docs/                   # Documentation (200+ pages)
-│   ├── ARCHITECTURE_COMPARISON.md
-│   ├── BLOG_POST.md
-│   └── ...
-└── README.md              # This file
+┌─────────────────────────────────────────────────────────────────┐
+│                        EVENT SOURCES                             │
+├─────────────────────────────────────────────────────────────────┤
+│  CloudTrail │ EventBridge │ CloudWatch │ EKS Events │ Custom    │
+└──────┬──────────────┬──────────┬──────────┬──────────┬──────────┘
+       │              │          │          │          │
+       └──────────────┴──────────┴──────────┴──────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │  EventBridge Rule │
+                    └─────────┬─────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │   ORCHESTRATOR    │
+                    │   Lambda Function │
+                    └─────────┬─────────┘
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+   ┌────▼────┐          ┌────▼────┐          ┌────▼────┐
+   │ TRIAGE  │          │  RISK   │          │REMEDIATE│
+   │  Agent  │─────────▶│  Agent  │─────────▶│  Agent  │
+   └────┬────┘          └────┬────┘          └────┬────┘
+        │                    │                     │
+        │              ┌─────▼─────┐               │
+        │              │ TELEMETRY │               │
+        │              │   Agent   │               │
+        │              └───────────┘               │
+        │                                          │
+        └──────────────────┬───────────────────────┘
+                           │
+                    ┌──────▼──────┐
+                    │    COMMS    │
+                    │    Agent    │
+                    └──────┬──────┘
+                           │
+                    ┌──────▼──────┐
+                    │ Notifications│
+                    │ (Email/SNS) │
+                    └─────────────┘
 ```
 
-## 🔧 Configuration
+### Agent Workflow & Decision Making
 
-### Key Variables (terraform.tfvars)
+#### 1. **Triage Agent** (First Responder)
+**Purpose**: Classify and prioritize incidents
 
-```hcl
-# AWS Configuration
-aws_region = "us-east-1"
+**Decision Process**:
+```python
+1. Calculate Fingerprint
+   ├─ Hash(event_name + resource_type + resource_id + region)
+   └─ Check DynamoDB for duplicates (24h window)
 
-# Phase control
-enable_dynamodb = true
-enable_enhanced_lambda = true
-enable_log_analyzer = true
+2. Classify Severity
+   ├─ CRITICAL: Production failures, data loss
+   ├─ HIGH: Service degradation, security events
+   ├─ MEDIUM: Performance issues, warnings
+   └─ LOW: Informational, routine changes
 
-# AI configuration
-confidence_threshold = 0.8
-cooldown_minutes = 5
+3. Assess Business Impact
+   ├─ Affected Services: Parse event details
+   ├─ Blast Radius: localized | regional | global
+   ├─ Estimated Downtime: Based on resource type
+   └─ Customer Impact: Severity mapping
 
-# Monitoring
-log_groups = "/aws/lambda/orchestrator"
-anomaly_threshold = 0.7
-
-# Notifications
-sns_topic_arn = "arn:aws:sns:REGION:YOUR_AWS_ACCOUNT_ID:notifications"
+4. Noise Filtering
+   ├─ Duplicate Detection: Suppress if seen recently
+   ├─ Noise Score: 0.0 (unique) to 1.0 (spam)
+   └─ Action Required: severity >= MEDIUM && !duplicate
 ```
 
-## 🧪 Testing
-
-### Run Automated Tests
-
-```bash
-cd demos
-
-# Quick test (50 seconds)
-./quick_test.sh
-
-# Chaos engineering demo
-./chaos_demo_simple.sh
-
-# Complete trace demo
-./full_trace_demo.sh
-```
-
-### Test Results
-
-All tests pass with 100% success rate:
-- Infrastructure validation ✅
-- Lambda invocation ✅
-- DynamoDB logging ✅
-- Bedrock AI analysis ✅
-- Cooldown protection ✅
-- Log analyzer ✅
-
-See [docs/AUTOMATED_TEST_RESULTS.md](docs/AUTOMATED_TEST_RESULTS.md) for details.
-
-## 📖 Documentation
-
-- **[DEPLOYMENT_GUIDE.md](05-orchestration/DEPLOYMENT_GUIDE.md)** - Step-by-step deployment
-- **[ARCHITECTURE_COMPARISON.md](docs/ARCHITECTURE_COMPARISON.md)** - Before/after architecture
-- **[BLOG_POST.md](docs/BLOG_POST.md)** - Complete technical deep-dive
-- **[AWS_CONSOLE_DEMO_GUIDE.md](docs/AWS_CONSOLE_DEMO_GUIDE.md)** - AWS Console walkthrough
-- **[COMPLETE_DEPLOYMENT_SUMMARY.md](docs/COMPLETE_DEPLOYMENT_SUMMARY.md)** - All phases summary
-
-## 💰 Cost Breakdown
-
-| Service | Monthly Cost |
-|---------|--------------|
-| Lambda Invocations | $0 (free tier) |
-| Amazon Bedrock API | $2.00 |
-| DynamoDB (on-demand) | $0.75 |
-| CloudWatch Logs | $0 (free tier) |
-| EventBridge | $0 (free tier) |
-| **Total** | **$2.75/month** |
-
-## 🔒 Security
-
-- ✅ IAM least-privilege permissions
-- ✅ Encrypted DynamoDB tables
-- ✅ VPC endpoints for private communication
-- ✅ CloudTrail logging enabled
-- ✅ Complete audit trail
-- ✅ No hardcoded credentials
-- ✅ Secrets in AWS Secrets Manager
-
-## 🤝 Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Amazon Bedrock team for the amazing AI capabilities
-- AWS for the serverless infrastructure
-- HashiCorp for Terraform
-- The DevOps community for inspiration
-
-## 📞 Contact
-
-- **Author**: Nimish Mehta
-- **Email**: devops@example.com
-- **GitHub**: [@nimishmehta8779](https://github.com/nimishmehta8779)
-- **LinkedIn**: [Nimish Mehta](https://www.linkedin.com/in/nimish-mehta)
-
-## 🌟 Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
-## 🗺️ Roadmap
-
-- [ ] Multi-region deployment
-- [ ] Custom ML models for pattern recognition
-- [ ] Integration with PagerDuty/Slack
-- [ ] Advanced root cause analysis
-- [ ] Self-healing infrastructure patterns
-- [ ] Kubernetes support
-- [ ] Multi-cloud support (Azure, GCP)
+**Output**: Classification, deduplication status, priority
 
 ---
 
-**Built with ❤️ for DevOps Excellence**
+#### 2. **Telemetry Agent** (Data Collector)
+**Purpose**: Gather contextual metrics and logs
 
-*Transforming infrastructure management from reactive to proactive, one incident at a time.*
+**Decision Process**:
+```python
+1. Collect Metrics (CloudWatch)
+   ├─ EC2: CPU, Network, Disk
+   ├─ RDS: Connections, IOPS, Latency
+   ├─ Lambda: Invocations, Errors, Duration
+   └─ EKS: Pod metrics, Node health
+
+2. Retrieve Logs (CloudWatch Logs)
+   ├─ Last 15 minutes of application logs
+   ├─ Error pattern detection
+   └─ Correlation with event timestamp
+
+3. Trace Analysis (X-Ray)
+   ├─ Distributed trace collection
+   ├─ Error identification
+   └─ Performance bottleneck detection
+
+4. Anomaly Detection
+   ├─ Compare current vs baseline metrics
+   ├─ Statistical deviation analysis
+   └─ Flag abnormal patterns
+
+5. Health Score Calculation
+   └─ 0.0 (critical) to 1.0 (healthy)
+```
+
+**Output**: Metrics, logs, traces, anomalies, health score
+
+---
+
+#### 3. **Risk Agent** (Safety Validator)
+**Purpose**: Validate change safety and compliance
+
+**Decision Process**:
+```python
+1. Check Change Window
+   ├─ Current Time vs Blocked Windows
+   ├─ Default: Block Friday 4PM-11PM
+   └─ Allow 24/7 except blocked periods
+
+2. Validate Policy Compliance (AWS Config)
+   ├─ Query compliance status for resource
+   ├─ Check security group rules
+   ├─ Verify encryption settings
+   └─ Validate backup policies
+
+3. Check SLO/Error Budget
+   ├─ Query recent error rates
+   ├─ Calculate budget consumption
+   └─ Block if budget exhausted
+
+4. Assess Blast Radius
+   ├─ EC2: localized (single instance)
+   ├─ RDS: regional (database cluster)
+   ├─ DynamoDB: critical (data store)
+   └─ S3: critical (storage layer)
+
+5. Calculate Risk Score
+   risk_score = (
+       0.3 * (1 if !change_window_ok else 0) +
+       0.3 * (1 if !policy_compliant else 0) +
+       0.2 * (1 if !slo_budget_ok else 0) +
+       0.2 * blast_radius_weight
+   )
+
+6. Approval Decision
+   approval_required = (
+       risk_score > 0.5 OR
+       !change_window_ok OR
+       !policy_compliant
+   )
+```
+
+**Output**: Risk score, approval requirement, safety validation
+
+---
+
+#### 4. **Remediation Agent** (Action Executor)
+**Purpose**: Generate and execute recovery plans
+
+**Decision Process**:
+```python
+1. Generate Runbook (Bedrock AI)
+   ├─ Query Knowledge Base for similar incidents
+   ├─ Construct prompt with context
+   ├─ Invoke Bedrock (Amazon Titan)
+   └─ Parse JSON runbook response
+
+2. Fallback Logic (if Bedrock fails)
+   ├─ EC2: SSM Automation → AWS-StartEC2Instance
+   ├─ RDS: SSM Automation → AWS-StartRdsInstance
+   ├─ EKS: Lambda Invoke → aiops-kubernetes-agent
+   └─ Lambda: Terraform → redeploy function
+
+3. Assess Remediation Risk
+   ├─ Check Risk Agent approval status
+   ├─ Evaluate runbook complexity
+   └─ Determine auto-executability
+
+4. Execute or Queue
+   IF approval_required:
+       ├─ Store in DynamoDB (pending_approval)
+       ├─ Send notification to approvers
+       └─ Wait for manual approval
+   ELSE:
+       ├─ Execute runbook steps sequentially
+       ├─ Monitor execution status
+       └─ Rollback on failure
+
+5. Execution Methods
+   ├─ SSM: start_automation_execution()
+   ├─ Lambda: invoke() with payload
+   ├─ Terraform: trigger CodeBuild project
+   └─ Manual: human intervention required
+```
+
+**Output**: Runbook, execution results, approval status
+
+---
+
+#### 5. **Communications Agent** (Notifier)
+**Purpose**: Human-readable updates and notifications
+
+**Decision Process**:
+```python
+1. Generate Incident Summary (Bedrock AI)
+   ├─ Aggregate all agent results
+   ├─ Create human-readable narrative
+   └─ Include impact, status, next steps
+
+2. Determine Recipients
+   ├─ CRITICAL/HIGH: Escalation list + on-call
+   ├─ MEDIUM: DevOps team
+   └─ LOW: Monitoring dashboard only
+
+3. Select Notification Channels
+   ├─ Email (SES): All severities
+   ├─ SNS: CRITICAL/HIGH only
+   └─ Slack/PagerDuty: Future integration
+
+4. Send Notifications
+   ├─ Format email with incident details
+   ├─ Include approval link (if required)
+   └─ Track delivery status
+
+5. Store Communication Log
+   └─ Update DynamoDB incident record
+```
+
+**Output**: Notifications sent, delivery status
+
+---
+
+## 🔄 End-to-End Workflow Example
+
+### Scenario: EC2 Instance Stopped
+
+```
+1. EVENT DETECTION (t=0ms)
+   ├─ EventBridge detects EC2 state change
+   ├─ Event: {"detail-type": "EC2 Instance State-change Notification"}
+   └─ Trigger: Orchestrator Lambda
+
+2. ORCHESTRATOR (t=50ms)
+   ├─ Parse event → resource_type='ec2', resource_id='i-xxx'
+   ├─ Create incident record in DynamoDB
+   └─ Initialize agent coordination
+
+3. TRIAGE AGENT (t=100ms)
+   ├─ Fingerprint: hash('EC2StateChange-ec2-i-xxx-us-east-1')
+   ├─ Duplicate check: NOT FOUND
+   ├─ Classification: MEDIUM (unplanned stop)
+   ├─ Business Impact: localized, 30min downtime
+   └─ Decision: PROCEED (requires_immediate_action=True)
+
+4. TELEMETRY AGENT (t=300ms)
+   ├─ CloudWatch Metrics: CPU=0% (stopped)
+   ├─ Logs: Last entry 2min ago (normal shutdown)
+   ├─ X-Ray: No active traces
+   ├─ Health Score: 0.0 (instance down)
+   └─ Decision: UNHEALTHY
+
+5. RISK AGENT (t=500ms)
+   ├─ Change Window: OK (Thursday 11PM)
+   ├─ Policy Compliance: OK (no violations)
+   ├─ SLO Budget: OK (99.9% uptime)
+   ├─ Blast Radius: localized (0.1 weight)
+   ├─ Risk Score: 0.1 (LOW)
+   └─ Decision: SAFE TO PROCEED (approval_required=False)
+
+6. REMEDIATION AGENT (t=1000ms)
+   ├─ Bedrock Query: "How to recover stopped EC2?"
+   ├─ Fallback: SSM Automation (AWS-StartEC2Instance)
+   ├─ Runbook: [{"action": "ssm", "params": {"InstanceId": "i-xxx"}}]
+   ├─ Risk Check: approval_required=False
+   ├─ Execute: ssm.start_automation_execution()
+   └─ Result: Execution ID: abc-123 (SUCCESS)
+
+7. COMMUNICATIONS AGENT (t=1500ms)
+   ├─ Summary: "EC2 instance i-xxx stopped unexpectedly. 
+   │            Automated recovery initiated via SSM.
+   │            Expected recovery time: 2 minutes."
+   ├─ Recipients: devops@example.com
+   ├─ Send Email: SUCCESS
+   └─ Update DynamoDB: workflow_state=COMPLETED
+
+8. VERIFICATION (t=120s)
+   ├─ SSM Automation completes
+   ├─ Instance state: running
+   └─ Health check: PASS
+```
+
+**Total Time to Recovery**: ~2 minutes (fully automated)
+
+---
+
+## 📦 Supported Resources
+
+| Resource | Detection | Remediation | Method |
+|----------|-----------|-------------|--------|
+| **EC2** | EventBridge (real-time) | Start instance | SSM Automation |
+| **RDS** | EventBridge (real-time) | Start DB instance | SSM Automation |
+| **EKS** | CloudWatch Schedule (1min) | Restart pod/rollback | Lambda (K8s Agent) |
+| **Lambda** | CloudWatch Logs | Redeploy function | Terraform/CodeBuild |
+| **DynamoDB** | CloudTrail (15min) | Restore table | Terraform |
+| **S3** | CloudTrail (15min) | Recreate bucket | Terraform |
+
+---
+
+## 🚀 Deployment
+
+### Prerequisites
+- AWS Account with appropriate permissions
+- Terraform >= 1.0
+- AWS CLI configured
+- Python 3.9+
+
+### Quick Start
+
+```bash
+# 1. Clone repository
+git clone <repository-url>
+cd aiops-devops-agent
+
+# 2. Configure variables
+cp 01-multi-agent/terraform.tfvars.example 01-multi-agent/terraform.tfvars
+# Edit terraform.tfvars with your AWS account details
+
+# 3. Deploy infrastructure (in order)
+cd 01-multi-agent && terraform init && terraform apply
+cd ../03-ml-models && terraform init && terraform apply
+cd ../04-kubernetes && terraform init && terraform apply
+cd ../05-knowledge-base && terraform init && terraform apply
+
+# 4. Deploy test infrastructure (optional)
+cd ../test-infrastructure && terraform init && terraform apply
+```
+
+### Module Deployment Order
+
+1. **01-multi-agent**: Core orchestrator and agents
+2. **03-ml-models**: ML-based pattern analysis
+3. **04-kubernetes**: EKS cluster and K8s agent
+4. **05-knowledge-base**: Bedrock KB for runbook storage
+5. **test-infrastructure**: Test EC2/RDS resources
+
+---
+
+## 🧪 Testing
+
+### Run Automated Recovery Demo
+
+```bash
+# EC2 Recovery Demo
+./demos/scripts/live_recovery_demo.sh
+
+# EKS Rollback Demo
+./demos/scripts/live_recovery_demo_rollback.sh
+
+# Comprehensive Test
+./demos/scripts/comprehensive_test.sh
+```
+
+### Manual Testing
+
+```bash
+# Trigger EC2 failure
+aws ec2 stop-instances --instance-ids i-xxx
+
+# Monitor orchestrator logs
+aws logs tail /aws/lambda/aiops-multi-agent-orchestrator --follow
+
+# Check incident status
+aws dynamodb get-item --table-name aiops-incidents \
+  --key '{"incident_id": {"S": "incident-xxx"}}'
+```
+
+---
+
+## 📊 Monitoring & Observability
+
+### CloudWatch Dashboards
+- **Agent Performance**: Execution times, success rates
+- **Incident Metrics**: Detection latency, recovery time
+- **Resource Health**: Service availability, error rates
+
+### Key Metrics
+- `AIOps/Triage/IncidentsClassified`
+- `AIOps/Risk/ApprovalRequired`
+- `AIOps/Remediation/RemediationAttempts`
+- `AIOps/Communications/NotificationsSent`
+
+### Logs
+- `/aws/lambda/aiops-multi-agent-orchestrator`
+- `/aws/lambda/aiops-kubernetes-agent`
+- `/aws/lambda/aiops-ml-models-agent`
+
+---
+
+## 🔐 Security
+
+### IAM Permissions
+- **Orchestrator**: Read CloudWatch, DynamoDB, invoke Bedrock
+- **Remediation**: SSM automation, Lambda invoke, EC2/RDS start
+- **K8s Agent**: EKS cluster access, kubectl operations
+
+### Data Protection
+- All logs encrypted at rest (KMS)
+- Secrets managed via AWS Secrets Manager
+- Network isolation via VPC security groups
+
+### Compliance
+- AWS Config integration for policy validation
+- Change window enforcement
+- Approval workflows for high-risk actions
+
+---
+
+## 🛠️ Configuration
+
+### Environment Variables
+
+**Orchestrator Lambda**:
+```bash
+INCIDENT_TABLE=aiops-incidents
+BEDROCK_MODEL_ID=amazon.titan-text-express-v1
+KNOWLEDGE_BASE_ID=<kb-id>
+```
+
+**Risk Agent**:
+```bash
+BLOCKED_WINDOWS='[{"day": 4, "start_hour": 16, "end_hour": 23}]'
+SLO_ERROR_BUDGET_THRESHOLD=0.001
+```
+
+### Terraform Variables
+
+```hcl
+# 01-multi-agent/terraform.tfvars
+project_name = "aiops"
+aws_region = "us-east-1"
+default_email = "devops@example.com"
+enable_ses = true
+```
+
+---
+
+## 📈 Cost Optimization
+
+### Estimated Monthly Costs (us-east-1)
+
+| Service | Usage | Cost |
+|---------|-------|------|
+| Lambda | 10K invocations/month | $0.20 |
+| DynamoDB | 1GB storage, 100 WCU/RCU | $1.50 |
+| CloudWatch | 10GB logs, 100 metrics | $5.00 |
+| Bedrock | 1M tokens/month | $3.00 |
+| EKS | 1 cluster (control plane) | $73.00 |
+| **Total** | | **~$83/month** |
+
+### Cost Reduction Tips
+- Use Lambda reserved concurrency
+- Enable DynamoDB auto-scaling
+- Set CloudWatch log retention to 7 days
+- Use Bedrock on-demand pricing
+
+---
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
+
+## 📝 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**Issue**: Orchestrator not triggering
+- **Check**: EventBridge rule is enabled
+- **Check**: Lambda has EventBridge permissions
+- **Fix**: `aws events enable-rule --name aiops-multi-agent-cloudtrail-events`
+
+**Issue**: Remediation fails with AccessDenied
+- **Check**: Lambda IAM role has `ec2:StartInstances`, `rds:StartDBInstance`
+- **Fix**: Update `01-multi-agent/iam.tf` and redeploy
+
+**Issue**: Bedrock returns "Error generating response"
+- **Check**: Model access enabled in Bedrock console
+- **Check**: IAM permissions for `bedrock:InvokeModel`
+- **Fix**: Enable model access or switch to fallback logic
+
+---
+
+## 📚 Additional Resources
+
+- [Architecture Deep Dive](docs/ARCHITECTURE.md)
+- [Agent Framework Guide](docs/AGENT_FRAMEWORK.md)
+- [Deployment Guide](DEPLOYMENT_GUIDE.md)
+- [API Reference](docs/API_REFERENCE.md)
+
+---
+
+## 🎓 Learn More
+
+- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+- [Multi-Agent Systems](https://en.wikipedia.org/wiki/Multi-agent_system)
+- [Site Reliability Engineering](https://sre.google/)
+
+---
+
+**Built with ❤️ for DevOps Engineers**

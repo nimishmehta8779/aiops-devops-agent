@@ -1,0 +1,22 @@
+# AIOps Multi-Agent System Configuration
+# Copy this file to terraform.tfvars and update with your values
+
+# Project Configuration
+project_name = "aiops"
+aws_region   = "us-east-1"
+
+# Email Configuration
+default_email = "your-email@example.com"  # Replace with your email
+sender_email  = "noreply@example.com"     # SES verified sender
+
+# Optional: Enable SES email notifications
+enable_ses = true
+
+# Optional: SNS Topic ARN for critical alerts
+# sns_topic_arn = "arn:aws:sns:us-east-1:YOUR_ACCOUNT_ID:aiops-alerts"
+
+# Optional: CodeBuild project for Terraform execution
+codebuild_project = "aiops-devops-agent-apply"
+
+# Optional: Knowledge Base ID (deployed separately)
+# knowledge_base_id = "YOUR_KB_ID"
